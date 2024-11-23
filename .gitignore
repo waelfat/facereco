@@ -1,1 +1,13 @@
+# Virtual Environment
 venv/
+encodings/
+employee_metadata.json
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*.so
+*.egg
+*.npy
+*.egg-info/
+dist/
+build/
