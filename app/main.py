@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.api.endpoints import register, login, employee,match
+from app.api.endpoints import register, login, employee
 from app.utils.file_storage import initialize_metadata
 from contextlib import asynccontextmanager
 
@@ -22,4 +22,4 @@ app.add_middleware(
 app.include_router(register.router, prefix="/api")
 app.include_router(login.router, prefix="/api")
 app.include_router(employee.router, prefix="/api")
-app.include_router(match.router, prefix="/api")
+
