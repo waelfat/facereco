@@ -7,7 +7,10 @@ __pycache__/
 *.py[cod]
 *.so
 *.egg
+*.pem
 *.npy
+*.Identifier
+.gitignore
 *.egg-info/
 dist/
 build/
