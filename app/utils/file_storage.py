@@ -2,6 +2,7 @@ import json
 import os
 import numpy as np
 from typing import Dict, Any
+import tempfile
 
 ENCODINGS_DIR = "encodings"
 METADATA_FILE = "employee_metadata.json"
@@ -52,3 +53,9 @@ def delete_employee(employee_id: str):
         del metadata_cache[employee_id]
         with open(METADATA_FILE, "w") as f:
             json.dump(metadata_cache, f)
+
+# def save_image(image: bytes):
+
+#     filename =  'waelname' + ".jpg"
+#     with open(filename, "wb") as f:
+#         f.write(image)

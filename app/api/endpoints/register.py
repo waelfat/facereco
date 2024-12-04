@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Query, Request, UploadFile, File, HTTPException, Form
-from app.utils.face_recognition import encode_face
+from app.utils.face_recognition import encode_face, encode_face_bytes
 from app.utils.file_storage import load_metadata, save_encoding, save_metadata
 from PIL import Image
 from io import BytesIO
@@ -65,7 +65,7 @@ async def register_employee_octet_stream(
      if employee_id in metadata:
         raise HTTPException(status_code=400, detail="Employee ID already exists")
      try:
-        face_encoding = encode_face(data)
+        face_encoding = encode_face_bytes(data)
         encoding_filename = save_encoding(employee_id, face_encoding)
         save_metadata(employee_id, name, encoding_filename)
         return {"employee_id": employee_id, "name": name}
