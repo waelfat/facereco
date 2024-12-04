@@ -49,9 +49,9 @@ async def register_employee(
 async def register_employee_octet_stream(
      request:Request,
     employee_id:str =    Query(...),
-    name:str = Query(...)
+    employee_name:str = Query(...)
 ):
-     if not employee_id or not name:
+     if not employee_id or not employee_name:
         raise HTTPException(status_code=400, detail="Missing required fields")
      
      data = await request.body()
