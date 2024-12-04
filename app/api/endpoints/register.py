@@ -67,7 +67,7 @@ async def register_employee_octet_stream(
      try:
         face_encoding = encode_face_bytes(data)
         encoding_filename = save_encoding(employee_id, face_encoding)
-        save_metadata(employee_id, name, encoding_filename)
-        return {"employee_id": employee_id, "name": name}
+        save_metadata(employee_id, employee_name, encoding_filename)
+        return {"employee_id": employee_id, "name": employee_name}
      except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
