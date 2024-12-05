@@ -43,5 +43,7 @@ async def mw_log_request(request: Request,call_next):
         "headers": dict(request.headers),
         "properties": properties
     }
+    with open("log.txt", "a") as f:
+        f.write(json.dumps(log_entry, indent=4) + "\n")
     response = await call_next(request)
     return response
