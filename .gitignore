@@ -1,6 +1,7 @@
 # Virtual Environment
 venv/
 encodings/
+pem/
 employee_metadata.json
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -18,3 +19,4 @@ build/
 *.html
 *.jpg
 *.png
+.gitignore

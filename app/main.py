@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.api.endpoints import register, login, employee
+from app.api.middleware.log_request import mw_log_request
 from app.utils.file_storage import initialize_metadata
 from contextlib import asynccontextmanager
 
@@ -9,7 +10,9 @@ async def lifespan(app: FastAPI):
     initialize_metadata()
     yield
 
-app = FastAPI(lifespan=lifespan)
+app = FastAPI(lifespan=lifespan,middleware=[
+    mw_log_request
+])
 
 app.add_middleware(
     CORSMiddleware,
