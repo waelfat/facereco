@@ -1,49 +1,49 @@
 from fastapi import Request
 import json
 from typing import Any
+import os
 
-def extract_properties(data: Any) -> dict[str, Any]:
+LOG_FILE_PATH = "request_logs.json"
+
+def extract_properties(data: Any) -> Any:
     if isinstance(data, dict):
-        return {k: extract_properties(v) for k, v in data.items()}
+        return {key: extract_properties(value) for key, value in data.items()}
     elif isinstance(data, list):
-        return [extract_properties(v) for v in data]
+        return [extract_properties(item) for item in data]
     else:
-        return str(data)
+        return str(type(data).__name__)
 
-    # properties = {
-    #     "method": request.method,
-    #     "url": str(request.url),
-    #     "headers": dict(request.headers),
-    #     "cookies": request.cookies,
-    #     "query_params": request.query_params,
-    #     "path_params": request.path_params,
-    #     "client": {
-    #         "host": request.client.host,
-    #         "port": request.client.port,
-    #         "ip": request.client.ip,
-    #     },
-    #     "body": {
-    #         "content": request.body(),
-    #         "encoding": request.headers.get("content-encoding", "utf-8"),
-    #         "media_type": request.headers.get("content-type", "application/octet-stream")
-    #     },
-    # }
-    # return properties
+async def mw_log_request(request: Request, call_next):
+    
+    properties = {}
 
-async def mw_log_request(request: Request,call_next):
-    try:
-        body = await request.json()
-        properties = extract_properties(body)
-    except json.JSONDecodeError:
-        properties = "Binary or file"
+    if request.method in ("POST", "PUT", "PATCH"):
+        try:
+            content_type = request.headers.get("content-type")
+            if content_type and "application/json" in content_type:
+                body = await request.json()
+                properties = extract_properties(body)
+            elif content_type and "multipart/form-data" in content_type:
+                form = await request.form()
+                for key, value in form.items():
+                    if hasattr(value, "filename"):
+                        properties[key] = "file"
+                    else:
+                        properties[key] = str(type(value).__name__)
+            else:
+                properties = "Unsupported Content Type"
+        except Exception as e:
+            properties = f"Error extracting properties: {e}"
 
-    log_entry={
-        "url": request.url.path,
+    log_entry = {
+        "url": str(request.url),
         "method": request.method,
-        "headers": dict(request.headers),
         "properties": properties
     }
-    with open("log.txt", "a") as f:
-        f.write(json.dumps(log_entry, indent=4) + "\n")
+    
+    # Write the log entry to a file
+    with open(LOG_FILE_PATH, "a") as log_file:
+        log_file.write(json.dumps(log_entry) + "\n")
+
     response = await call_next(request)
     return response

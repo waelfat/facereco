@@ -1,0 +1,19 @@
+{"url": "http://127.0.0.1:8000/", "method": "GET", "properties": "No body for this method"}
+{"url": "http://127.0.0.1:8000/favicon.ico", "method": "GET", "properties": "No body for this method"}
+{"url": "http://127.0.0.1:8000/docs", "method": "GET", "properties": "No body for this method"}
+{"url": "http://127.0.0.1:8000/openapi.json", "method": "GET", "properties": "No body for this method"}
+{"url": "http://127.0.0.1:8000/api/employees", "method": "GET", "properties": "No body for this method"}
+{"url": "http://127.0.0.1:8000/api/login", "method": "POST", "properties": "Binary or Form data"}
+{"url": "http://127.0.0.1:8000/api/register", "method": "POST", "properties": "Binary or Form data"}
+{"url": "http://127.0.0.1:8000/api/register", "method": "POST", "properties": "Binary or Form data"}
+{"url": "http://127.0.0.1:8000/api/register", "method": "POST", "properties": "Binary or Form data"}
+{"url": "http://127.0.0.1:8000/api/register", "method": "POST", "properties": "Binary or Form data"}
+{"url": "http://127.0.0.1:8000/api/register", "method": "POST", "properties": "Binary or Form data"}
+{"url": "http://127.0.0.1:8000/api/register", "method": "POST", "properties": "Binary or Form data"}
+{"url": "http://127.0.0.1:8000/api/register", "method": "POST", "properties": "Binary or Form data"}
+{"url": "http://127.0.0.1:8000/api/register", "method": "POST", "properties": {"employee_id": "str", "name": "str", "image": "file"}}
+{"url": "http://127.0.0.1:8000/api/register", "method": "POST", "properties": {"employee_id": "str", "name": "str", "image": "file"}}
+{"url": "http://127.0.0.1:8000/docs", "method": "GET", "properties": {}}
+{"url": "http://127.0.0.1:8000/openapi.json", "method": "GET", "properties": {}}
+{"url": "http://127.0.0.1:8000/api/register", "method": "POST", "properties": {"employee_id": "str", "name": "str", "image": "file"}}
+{"url": "http://127.0.0.1:8000/api/register", "method": "POST", "properties": {"employee_id": "str", "name": "str", "image": "file"}}
