@@ -4,6 +4,7 @@ encodings/
 pem/
 employee_metadata.json
 # Byte-compiled / optimized / DLL files
+request_logs.json
 __pycache__/
 *.py[cod]
 *.so
