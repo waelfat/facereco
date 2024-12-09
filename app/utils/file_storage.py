@@ -1,3 +1,4 @@
+import aiofiles
 import json
 import os
 import numpy as np
@@ -59,3 +60,16 @@ def delete_employee(employee_id: str):
 #     filename =  'waelname' + ".jpg"
 #     with open(filename, "wb") as f:
 #         f.write(image)
+
+def create_unique_file_name ():
+    import uuid
+    return str(uuid.uuid4())
+
+
+
+
+async def save_image(body_image:bytes):
+    file_name=create_unique_file_name()
+    
+    async with aiofiles.open(file_name, 'wb') as out_file:
+        await out_file.write(body_image)
