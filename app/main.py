@@ -3,15 +3,13 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.api.endpoints import register, login, employee
 from app.utils.file_storage import initialize_metadata
 from contextlib import asynccontextmanager
-from .loginwithlogging import LoggingMiddleware
-
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     initialize_metadata()
     yield
 
 app = FastAPI(lifespan=lifespan)
-app.add_middleware(LoggingMiddleware)
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],

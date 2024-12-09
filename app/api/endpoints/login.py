@@ -3,9 +3,17 @@ from app.utils.face_recognition import encode_face, compare_faces, encode_face_b
 from app.utils.file_storage import load_metadata, load_encoding
 from PIL import Image
 from io import BytesIO
-from app.loginwithlogging import log_error
+import logging
+def log_info(message):
+    logging.info(message)
+def log_error(message):
+    logging.error(message)
+
 
 router = APIRouter()
+logging.basicConfig(filename='app.log', level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+
+
 def valid_image(bytes: bytes) -> bool:
     try:
         imget=Image.open(BytesIO(bytes))
@@ -17,7 +25,22 @@ def valid_image(bytes: bytes) -> bool:
 
 
 @router.post("/login")
-async def login(image: UploadFile = File(...)):
+async def login(request: Request, image: UploadFile = File(...)):
+      # Log request information including the client's IP address
+    method = request.method
+    url = str(request.url)
+    headers = dict(request.headers)
+    client_host = request.client.host
+    query_params = dict(request.query_params)
+    log_info("Request received-----------")
+
+    logging.info(f"Request method: {method}")
+    logging.info(f"Request URL: {url}")
+    logging.info(f"Request headers: {headers}")
+    logging.info(f"Client host: {client_host}")
+    logging.info(f"Query parameters: {query_params}")
+    logging.info(f"Request loggedend -------------")
+
     if not image:
         log_error("Missing image")
         raise HTTPException(status_code=400, detail="Missing image")
