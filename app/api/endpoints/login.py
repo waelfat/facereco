@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Request, UploadFile, File, HTTPException
 from app.utils.face_recognition import encode_face, compare_faces, encode_face_bytes
-from app.utils.file_storage import load_metadata, load_encoding
+from app.utils.file_storage import load_metadata, load_encoding,save_image,get_unique_filename,get_globally_unique_filename
 from PIL import Image
 from io import BytesIO
 import logging
@@ -48,7 +48,11 @@ async def login(request: Request, image: UploadFile = File(...)):
             log_error("Invalid image format. Only PNG, JPG, and JPEG are allowed.")
             raise HTTPException(status_code=400, detail="Invalid image format. Only PNG, JPG, and JPEG are allowed.")
     try:
-        face_encoding = encode_face(image)
+        global_unique_filename = get_globally_unique_filename()
+        save_image(await image.read(), global_unique_filename)
+     
+
+        face_encoding = encode_face(global_unique_filename)
         metadata = load_metadata()
         for employee_id, details in metadata.items():
             known_face_encoding = load_encoding(details['encoding_filename'])

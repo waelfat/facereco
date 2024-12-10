@@ -1,10 +1,10 @@
-import aiofiles
+from io import BytesIO
 import json
 import os
 import numpy as np
 from typing import Dict, Any
-import tempfile
-
+from PIL import Image
+import uuid
 ENCODINGS_DIR = "encodings"
 METADATA_FILE = "employee_metadata.json"
 
@@ -67,9 +67,16 @@ def create_unique_file_name ():
 
 
 
-
-async def save_image(body_image:bytes):
-    file_name=create_unique_file_name()
+def save_image(bytes: bytes, filename: str) -> bool:
+    try:
+        imget=Image.open(BytesIO(bytes))
+        imget.save(filename, format=imget.format)
+        return True
+    except:
+        return False
     
-    async with aiofiles.open(file_name, 'wb') as out_file:
-        await out_file.write(body_image)
+def get_unique_filename(employee_id: str, extension: str) -> str:
+    return f"{employee_id}.{extension}"
+def get_globally_unique_filename():
+    return uuid.uuid4().hex + ".jpg"
+    

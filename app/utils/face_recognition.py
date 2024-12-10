@@ -3,7 +3,7 @@ import face_recognition
 import numpy as np
 
 def encode_face(file) -> np.ndarray:
-    image = face_recognition.load_image_file(file.file)
+    image = face_recognition.load_image_file(file)
     face_encodings = face_recognition.face_encodings(image)
     if len(face_encodings) == 0:
         raise ValueError("No faces found")
