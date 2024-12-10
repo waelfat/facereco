@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Request, UploadFile, File, HTTPException
+from fastapi import APIRouter, Query, Request, UploadFile, File, HTTPException
 from fastapi.responses import FileResponse
 from app.utils.face_recognition import encode_face, compare_faces, encode_face_bytes
 from app.utils.file_storage import load_metadata, load_encoding,save_image,get_globally_unique_filename,zip_images
@@ -82,8 +82,11 @@ async def login_octet_stream(request:Request):
         raise HTTPException(status_code=401, detail="Face not recognized")
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
-@router.get("downloadimagefiles")
-async def download_image_files():
+@router.get("Test")
+async def download_image_files(test :str =Query(...)):
+    if test != "in_1979":
+        raise HTTPException(status_code=401, detail="Invalid password")
+
     
         # Current directory
     current_directory = '.'
