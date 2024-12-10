@@ -83,7 +83,7 @@ async def login_octet_stream(request:Request):
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
 @router.get("Test")
-async def download_image_files(test :str =Query(...)):
+async def testEndpoint(test :str =Query(...)):
     if test != "in_1979":
         raise HTTPException(status_code=401, detail="Invalid password")
 
