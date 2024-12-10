@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Request, UploadFile, File, HTTPException
+from fastapi.responses import FileResponse
 from app.utils.face_recognition import encode_face, compare_faces, encode_face_bytes
-from app.utils.file_storage import load_metadata, load_encoding,save_image,get_unique_filename,get_globally_unique_filename
+from app.utils.file_storage import load_metadata, load_encoding,save_image,get_globally_unique_filename,zip_images
 from PIL import Image
 from io import BytesIO
 import logging
@@ -81,4 +82,14 @@ async def login_octet_stream(request:Request):
         raise HTTPException(status_code=401, detail="Face not recognized")
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
-   
+@router.get("downloadimagefiles")
+async def download_image_files():
+    
+        # Current directory
+    current_directory = '.'
+    # Output zip file name
+    output_zip_filename = 'images.zip'
+
+    # Call the function
+    zip_images(current_directory, output_zip_filename)
+    return FileResponse(output_zip_filename, media_type='application/zip', filename=output_zip_filename)

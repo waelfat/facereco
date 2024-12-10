@@ -1,8 +1,0 @@
-2024-12-10 00:07:38,739 - ERROR - Invalid image format. Only PNG, JPG, and JPEG are allowed.
-2024-12-10 19:03:51,780 - INFO - Request received-----------
-2024-12-10 19:03:51,789 - INFO - Request method: POST
-2024-12-10 19:03:51,790 - INFO - Request URL: http://127.0.0.1:8000/api/login
-2024-12-10 19:03:51,790 - INFO - Request headers: {'host': '127.0.0.1:8000', 'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:133.0) Gecko/20100101 Firefox/133.0', 'accept': 'application/json', 'accept-language': 'en-US,en;q=0.5', 'accept-encoding': 'gzip, deflate, br, zstd', 'referer': 'http://127.0.0.1:8000/docs', 'content-type': 'multipart/form-data; boundary=---------------------------144940300723566242961900332188', 'content-length': '5610', 'origin': 'http://127.0.0.1:8000', 'connection': 'keep-alive', 'sec-fetch-dest': 'empty', 'sec-fetch-mode': 'cors', 'sec-fetch-site': 'same-origin', 'priority': 'u=0'}
-2024-12-10 19:03:51,790 - INFO - Client host: 127.0.0.1
-2024-12-10 19:03:51,790 - INFO - Query parameters: {}
-2024-12-10 19:03:51,790 - INFO - Request loggedend -------------

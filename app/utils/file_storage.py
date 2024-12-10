@@ -1,6 +1,7 @@
 from io import BytesIO
 import json
 import os
+import zipfile
 import numpy as np
 from typing import Dict, Any
 from PIL import Image
@@ -79,4 +80,20 @@ def get_unique_filename(employee_id: str, extension: str) -> str:
     return f"{employee_id}.{extension}"
 def get_globally_unique_filename():
     return uuid.uuid4().hex + ".jpg"
-    
+
+
+def zip_images(directory, output_filename):
+    # Create a ZipFile object
+    with zipfile.ZipFile(output_filename, 'w') as zipf:
+        # Iterate over all files in the directory
+        for foldername, subfolders, filenames in os.walk(directory):
+            for filename in filenames:
+                # Check if the file is an image
+                if filename.lower().endswith(('.png', '.jpg', '.jpeg', '.gif', '.bmp')):
+                    # Create a complete filepath of the file
+                    file_path = os.path.join(foldername, filename)
+                    # Add file to the zip
+                    zipf.write(file_path, arcname=filename)
+    print(f"All images have been zipped into {output_filename}")
+
+
