@@ -53,6 +53,13 @@ def encode_face(file) -> np.ndarray:
 def compare_faces(known_face_encoding: np.ndarray, face_encoding: np.ndarray) -> bool:
     return face_recognition.compare_faces([known_face_encoding], face_encoding)[0]
 
+def get_face_encoding_from_file(file) -> np.ndarray:
+    image = face_recognition.load_image_file(file)
+    face_encodings = face_recognition.face_encodings(image)
+    if len(face_encodings) == 0:
+        raise ValueError("No faces found")
+    return np.array(face_encodings[0], dtype=np.float64)
+    
 
 
 

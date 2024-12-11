@@ -21,3 +21,4 @@ build/
 *.jpg
 *.png
 .gitignore
+*.log
