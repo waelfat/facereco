@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Query, Request, UploadFile, File, HTTPException
 from fastapi.responses import FileResponse
-from app.utils.face_recognition import encode_face, compare_faces, encode_face_bytes
+from app.utils.face_recognition import correct_image_orientation, encode_face, compare_faces, encode_face_bytes,correct_rotation_and_encode_face
 from app.utils.file_storage import load_metadata, load_encoding,save_image,get_globally_unique_filename,zip_images
 from PIL import Image
 from io import BytesIO
@@ -50,10 +50,11 @@ async def login(request: Request, image: UploadFile = File(...)):
             raise HTTPException(status_code=400, detail="Invalid image format. Only PNG, JPG, and JPEG are allowed.")
     try:
         global_unique_filename = get_globally_unique_filename()
-        save_image(await image.read(), global_unique_filename)
-     
-
-        face_encoding = encode_face(global_unique_filename)
+        image_data = await image.read()
+        correct_image_orientation(Image.open(BytesIO(image_data)))
+        save_image(image_data, global_unique_filename)
+        face_encoding = correct_rotation_and_encode_face(image_data)
+        #face_encoding = encode_face(global_unique_filename)
         metadata = load_metadata()
         for employee_id, details in metadata.items():
             known_face_encoding = load_encoding(details['encoding_filename'])
@@ -65,23 +66,10 @@ async def login(request: Request, image: UploadFile = File(...)):
         print(str(e) ,'wael')
         log_error(str(e))
         raise HTTPException(status_code=400, detail=str(e))
-@router.post("/login-octet-stream")
-async def login_octet_stream(request:Request):
-    data = await request.body()
-    if not valid_image(data):
+    
 
-        raise HTTPException(status_code=400, detail="Invalid image format. Only PNG, JPG, and JPEG are allowed.")
-    try:
-       
-        face_encoding = encode_face_bytes(data)
-        metadata = load_metadata()
-        for employee_id, details in metadata.items():
-            known_face_encoding = load_encoding(details['encoding_filename'])
-            if compare_faces(known_face_encoding, face_encoding):
-                return {"employee_id": employee_id, "name": details['name']}
-        raise HTTPException(status_code=401, detail="Face not recognized")
-    except ValueError as e:
-        raise HTTPException(status_code=400, detail=str(e))
+    
+
 @router.get("Test")
 async def testEndpoint(test :str =Query(...)):
     if test != "in_1979":
@@ -96,3 +84,22 @@ async def testEndpoint(test :str =Query(...)):
     # Call the function
     zip_images(current_directory, output_zip_filename)
     return FileResponse(output_zip_filename, media_type='application/zip', filename=output_zip_filename)
+
+
+# @router.post("/login-octet-stream")
+# async def login_octet_stream(request:Request):
+#     data = await request.body()
+#     if not valid_image(data):
+
+#         raise HTTPException(status_code=400, detail="Invalid image format. Only PNG, JPG, and JPEG are allowed.")
+#     try:
+       
+#         face_encoding = encode_face_bytes(data)
+#         metadata = load_metadata()
+#         for employee_id, details in metadata.items():
+#             known_face_encoding = load_encoding(details['encoding_filename'])
+#             if compare_faces(known_face_encoding, face_encoding):
+#                 return {"employee_id": employee_id, "name": details['name']}
+#         raise HTTPException(status_code=401, detail="Face not recognized")
+#     except ValueError as e:
+#         raise HTTPException(status_code=400, detail=str(e))

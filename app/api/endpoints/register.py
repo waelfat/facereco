@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Query, Request, UploadFile, File, HTTPException, Form
-from app.utils.face_recognition import encode_face, encode_face_bytes
+from app.utils.face_recognition import encode_face, encode_face_bytes,correct_rotation_and_encode_face
+from app.utils.face_recognition import correct_image_orientation
 from app.utils.file_storage import load_metadata, save_encoding, save_metadata,save_image,get_unique_filename
 from PIL import Image
 from io import BytesIO
@@ -32,10 +33,12 @@ async def register_employee(
     if employee_id in metadata:
         raise HTTPException(status_code=400, detail="Employee ID already exists")
     try:
-        save_image(await image.read(), get_unique_filename(employee_id, image.filename.split('.')[-1]))
+        image_date=await image.read()
+        correct_image_orientation(image_date)
+        save_image(image_date, get_unique_filename(employee_id, image.filename.split('.')[-1]))
         #Image.open(get_unique_filename(employee_id, image.filename.split('.')[-1]))
         
-        face_encoding = encode_face(get_unique_filename(employee_id, image.filename.split('.')[-1]))
+        face_encoding = correct_rotation_and_encode_face(image_date)
         encoding_filename = save_encoding(employee_id, face_encoding)
         save_metadata(employee_id, name, encoding_filename)
         return {"employee_id": employee_id, "name": name}
@@ -43,29 +46,33 @@ async def register_employee(
         raise HTTPException(status_code=400, detail=str(e))
     
 
-@router.post("/register-octet-stream")
-async def register_employee_octet_stream(
-     request:Request,
-    employee_id:str =    Query(...),
-    employee_name:str = Query(...)
-):
-     if not employee_id or not employee_name:
-        raise HTTPException(status_code=400, detail="Missing required fields")
+# @router.post("/register-octet-stream")
+# async def register_employee_octet_stream(
+#      request:Request,
+#     employee_id:str =    Query(...),
+#     employee_name:str = Query(...)
+# ):
+#      return {
+#          "employee_id": "not implemented",
+#         "employee_name": "not implemented"
+#      }
+#      if not employee_id or not employee_name:
+#         raise HTTPException(status_code=400, detail="Missing required fields")
      
-     data = await request.body()
-     if not data:
-        raise HTTPException(status_code=400, detail="Missing image")
-     if not valid_image(data):
-        raise HTTPException(status_code=400, detail="Invalid image format. Only PNG, JPG, and JPEG are allowed.")
+#      data = await request.body()
+#      if not data:
+#         raise HTTPException(status_code=400, detail="Missing image")
+#      if not valid_image(data):
+#         raise HTTPException(status_code=400, detail="Invalid image format. Only PNG, JPG, and JPEG are allowed.")
      
-     metadata = load_metadata()
+#      metadata = load_metadata()
 
-     if employee_id in metadata:
-        raise HTTPException(status_code=400, detail="Employee ID already exists")
-     try:
-        face_encoding = encode_face_bytes(data)
-        encoding_filename = save_encoding(employee_id, face_encoding)
-        save_metadata(employee_id, employee_name, encoding_filename)
-        return {"employee_id": employee_id, "name": employee_name}
-     except ValueError as e:
-        raise HTTPException(status_code=400, detail=str(e))
+#      if employee_id in metadata:
+#         raise HTTPException(status_code=400, detail="Employee ID already exists")
+#      try:
+#         face_encoding = correct_rotation_and_encode_face(data)
+#         encoding_filename = save_encoding(employee_id, face_encoding)
+#         save_metadata(employee_id, employee_name, encoding_filename)
+#         return {"employee_id": employee_id, "name": employee_name}
+#      except ValueError as e:
+#         raise HTTPException(status_code=400, detail=str(e))
