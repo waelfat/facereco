@@ -29,9 +29,13 @@ def correct_rotation_and_encode_face(image_bytes: bytes) -> np.ndarray:
         with BytesIO() as buffer:
             rotated_image.save(buffer, format='JPEG')
             rotated_image_bytes = buffer.getvalue()
+           
             face_encodings = face_recognition.face_encodings(face_recognition.load_image_file(BytesIO(rotated_image_bytes)))
             if len(face_encodings) > 0:
+                log_info(f"Face found after rotation of {angle} degrees")
                 return np.array(face_encodings[0], dtype=np.float64)
+    
+    log_error("No faces found after rotation")
     raise ValueError("No faces found")
         
 
@@ -91,4 +95,5 @@ def correct_image_orientation(image: Image.Image) :
         # Cases: image doesn't have getexif
         page_processing_logger.log(logging.INFO, "No EXIF data found")
         pass
+
     
